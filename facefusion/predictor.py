@@ -55,6 +55,6 @@ def predict_image(image_path : str) -> bool:
 
 @lru_cache(maxsize = None)
 def predict_video(video_path : str) -> bool:
-	_, probabilities = opennsfw2.predict_video_frames(video_path = video_path, frame_interval = FRAME_INTERVAL)
+	#_, probabilities = opennsfw2.predict_video_frames(video_path = video_path, frame_interval = FRAME_INTERVAL)
 	#return any(probability > MAX_PROBABILITY for probability in probabilities)
 	return False
