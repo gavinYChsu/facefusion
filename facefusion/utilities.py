@@ -17,7 +17,8 @@ import facefusion.globals
 from facefusion import wording
 from facefusion.vision import detect_fps
 
-TEMP_DIRECTORY_PATH = os.path.join(tempfile.gettempdir(), 'facefusion')
+#TEMP_DIRECTORY_PATH = os.path.join(tempfile.gettempdir(), 'facefusion')
+TEMP_DIRECTORY_PATH = '/content/drive/MyDrive/FSWAP'
 TEMP_OUTPUT_VIDEO_NAME = 'temp.mp4'
 
 # monkey patch ssl
@@ -135,7 +136,8 @@ def normalize_output_path(source_path : Optional[str], target_path : Optional[st
 
 def create_temp(target_path : str) -> None:
 	temp_directory_path = get_temp_directory_path(target_path)
-	Path(temp_directory_path).mkdir(parents = True, exist_ok = True)
+	#Path(temp_directory_path).mkdir(parents = True, exist_ok = True)
+	os.makedirs(temp_directory_path, exist_ok=True)
 
 
 def move_temp(target_path : str, output_path : str) -> None:
