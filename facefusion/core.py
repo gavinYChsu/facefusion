@@ -264,7 +264,7 @@ def process_video() -> None:
 	# Check if temp frames already exist
 	temp_frame_paths = get_temp_frame_paths(facefusion.globals.target_path, processed_frame_count)
 	update_status(f'# of unprocessed frames{len(temp_frame_paths)}')
-	if temp_frame_paths:
+	if processed_frame_count>0:
 		for frame_processor_module in get_frame_processors_modules(facefusion.globals.frame_processors):
 			update_status(wording.get('processing'), frame_processor_module.NAME)
 			frame_processor_module.process_video(facefusion.globals.source_path, temp_frame_paths)
