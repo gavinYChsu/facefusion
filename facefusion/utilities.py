@@ -103,9 +103,12 @@ def get_temp_frame_paths(target_path : str, processed_frame_count=0) -> List[str
 	temp_frames_pattern = get_temp_frames_pattern(target_path, '*')
 	#return sorted(glob.glob(temp_frames_pattern))
 	temp_frame_paths = sorted(glob.glob(temp_frames_pattern))
-	# 获取未处理的帧
-	unprocessed_frame_paths = temp_frame_paths[processed_frame_count:]
-	return unprocessed_frame_paths
+	if temp_frame_paths:
+		# 获取未处理的帧
+		unprocessed_frame_paths = temp_frame_paths[processed_frame_count:]
+		return unprocessed_frame_paths
+	else:
+		return temp_frame_paths
 
 
 def get_temp_frames_pattern(target_path : str, temp_frame_prefix : str) -> str:
