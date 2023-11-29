@@ -247,9 +247,8 @@ def get_device(execution_providers : List[str]) -> str:
 
 def get_processed_frame_count(target_path) -> int:
     # 实现获取已处理的帧数逻辑，可以根据实际需求进行修改
-	temp_directory_path = get_temp_directory_path(target_path)
 	target_name, _ = os.path.splitext(os.path.basename(target_path))
-	fp_count = os.path.join(temp_directory_path, f"{target_name}_count.txt")
+	fp_count = os.path.join(TEMP_DIRECTORY_PATH, f"{target_name}_count.txt")
 	if os.path.exists(fp_count):
 		with open(fp_count, "r") as f:
 			count = int(f.read())
