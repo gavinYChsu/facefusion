@@ -209,17 +209,56 @@ def process_image() -> None:
 		update_status(wording.get('processing_image_failed'))
 
 
+# def process_video() -> None:
+# 	if predict_video(facefusion.globals.target_path):
+# 		return
+# 	fps = detect_fps(facefusion.globals.target_path) if facefusion.globals.keep_fps else 25.0
+# 	# create temp
+# 	update_status(wording.get('creating_temp'))
+# 	create_temp(facefusion.globals.target_path)
+# 	# extract frames
+# 	update_status(wording.get('extracting_frames_fps').format(fps = fps))
+# 	extract_frames(facefusion.globals.target_path, fps)
+# 	# process frame
+# 	temp_frame_paths = get_temp_frame_paths(facefusion.globals.target_path)
+# 	if temp_frame_paths:
+# 		for frame_processor_module in get_frame_processors_modules(facefusion.globals.frame_processors):
+# 			update_status(wording.get('processing'), frame_processor_module.NAME)
+# 			frame_processor_module.process_video(facefusion.globals.source_path, temp_frame_paths)
+# 			frame_processor_module.post_process()
+# 	else:
+# 		update_status(wording.get('temp_frames_not_found'))
+# 		return
+# 	# merge video
+# 	update_status(wording.get('merging_video_fps').format(fps = fps))
+# 	if not merge_video(facefusion.globals.target_path, fps):
+# 		update_status(wording.get('merging_video_failed'))
+# 		return
+# 	# handle audio
+# 	if facefusion.globals.skip_audio:
+# 		update_status(wording.get('skipping_audio'))
+# 		move_temp(facefusion.globals.target_path, facefusion.globals.output_path)
+# 	else:
+# 		update_status(wording.get('restoring_audio'))
+# 		if not restore_audio(facefusion.globals.target_path, facefusion.globals.output_path):
+# 			update_status(wording.get('restoring_audio_failed'))
+# 			move_temp(facefusion.globals.target_path, facefusion.globals.output_path)
+# 	# clear temp
+# 	update_status(wording.get('clearing_temp'))
+# 	clear_temp(facefusion.globals.target_path)
+# 	# validate video
+# 	if is_video(facefusion.globals.target_path):
+# 		update_status(wording.get('processing_video_succeed'))
+# 	else:
+		update_status(wording.get('processing_video_failed'))
+
+
 def process_video() -> None:
 	if predict_video(facefusion.globals.target_path):
 		return
 	fps = detect_fps(facefusion.globals.target_path) if facefusion.globals.keep_fps else 25.0
-	# create temp
-	update_status(wording.get('creating_temp'))
-	create_temp(facefusion.globals.target_path)
-	# extract frames
-	update_status(wording.get('extracting_frames_fps').format(fps = fps))
-	extract_frames(facefusion.globals.target_path, fps)
-	# process frame
+
+	# Check if temp frames already exist
 	temp_frame_paths = get_temp_frame_paths(facefusion.globals.target_path)
 	if temp_frame_paths:
 		for frame_processor_module in get_frame_processors_modules(facefusion.globals.frame_processors):
@@ -227,8 +266,25 @@ def process_video() -> None:
 			frame_processor_module.process_video(facefusion.globals.source_path, temp_frame_paths)
 			frame_processor_module.post_process()
 	else:
-		update_status(wording.get('temp_frames_not_found'))
-		return
+		# create temp
+		update_status(wording.get('creating_temp'))
+		create_temp(facefusion.globals.target_path)
+		
+		# extract frames
+		update_status(wording.get('extracting_frames_fps').format(fps=fps))
+		extract_frames(facefusion.globals.target_path, fps)
+		
+		# process frame
+		temp_frame_paths = get_temp_frame_paths(facefusion.globals.target_path)
+		if temp_frame_paths:
+			for frame_processor_module in get_frame_processors_modules(facefusion.globals.frame_processors):
+				update_status(wording.get('processing'), frame_processor_module.NAME)
+				frame_processor_module.process_video(facefusion.globals.source_path, temp_frame_paths)
+				frame_processor_module.post_process()
+		else:
+			update_status(wording.get('temp_frames_not_found'))
+			return
+
 	# merge video
 	update_status(wording.get('merging_video_fps').format(fps = fps))
 	if not merge_video(facefusion.globals.target_path, fps):
