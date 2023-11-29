@@ -17,7 +17,7 @@ import facefusion.globals
 from facefusion import metadata, wording
 from facefusion.predictor import predict_image, predict_video
 from facefusion.processors.frame.core import get_frame_processors_modules, load_frame_processor_module
-from facefusion.utilities import is_image, is_video, detect_fps, compress_image, merge_video, extract_frames, get_temp_frame_paths, restore_audio, create_temp, move_temp, clear_temp, list_module_names, encode_execution_providers, decode_execution_providers, normalize_output_path
+from facefusion.utilities import is_image, is_video, detect_fps, compress_image, merge_video, extract_frames, get_temp_frame_paths, restore_audio, create_temp, move_temp, clear_temp, list_module_names, encode_execution_providers, decode_execution_providers, normalize_output_path, get_processed_frame_count
 
 warnings.filterwarnings('ignore', category = FutureWarning, module = 'insightface')
 warnings.filterwarnings('ignore', category = UserWarning, module = 'torchvision')
@@ -253,13 +253,15 @@ def process_image() -> None:
 		update_status(wording.get('processing_video_failed'))
 
 
+
 def process_video() -> None:
 	if predict_video(facefusion.globals.target_path):
 		return
 	fps = detect_fps(facefusion.globals.target_path) if facefusion.globals.keep_fps else 25.0
-
+	# 在调用 process_video 之前，获取已处理的帧数
+	processed_frame_count = get_processed_frame_count(facefusion.globals.target_path)
 	# Check if temp frames already exist
-	temp_frame_paths = get_temp_frame_paths(facefusion.globals.target_path)
+	temp_frame_paths = get_temp_frame_paths(facefusion.globals.target_path, processed_frame_count)
 	if temp_frame_paths:
 		for frame_processor_module in get_frame_processors_modules(facefusion.globals.frame_processors):
 			update_status(wording.get('processing'), frame_processor_module.NAME)

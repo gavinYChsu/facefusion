@@ -99,9 +99,14 @@ def restore_audio(target_path : str, output_path : str) -> bool:
 	return run_ffmpeg(commands)
 
 
-def get_temp_frame_paths(target_path : str) -> List[str]:
+def get_temp_frame_paths(target_path : str, processed_frame_count=0) -> List[str]:
 	temp_frames_pattern = get_temp_frames_pattern(target_path, '*')
-	return sorted(glob.glob(temp_frames_pattern))
+	#return sorted(glob.glob(temp_frames_pattern))
+	temp_frame_paths = sorted(glob.glob(temp_frames_pattern))
+	# 获取未处理的帧
+    unprocessed_frame_paths = temp_frame_paths[processed_frame_count:]
+
+    return unprocessed_frame_paths
 
 
 def get_temp_frames_pattern(target_path : str, temp_frame_prefix : str) -> str:
@@ -238,3 +243,16 @@ def get_device(execution_providers : List[str]) -> str:
 	if 'CoreMLExecutionProvider' in execution_providers:
 		return 'mps'
 	return 'cpu'
+
+
+def get_processed_frame_count(target_path) -> int:
+    # 实现获取已处理的帧数逻辑，可以根据实际需求进行修改
+	temp_directory_path = get_temp_directory_path(target_path)
+	target_name, _ = os.path.splitext(os.path.basename(target_path))
+	fp_count = os.path.join(temp_directory_path, f"{target_name}_count.txt")
+	if os.path.exists(fp_count):
+		with open(fp_count, "r") as f:
+			count = int(f.read())
+		return count
+	else:
+		return 0
