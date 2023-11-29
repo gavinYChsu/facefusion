@@ -260,8 +260,10 @@ def process_video() -> None:
 	fps = detect_fps(facefusion.globals.target_path) if facefusion.globals.keep_fps else 25.0
 	# 在调用 process_video 之前，获取已处理的帧数
 	processed_frame_count = get_processed_frame_count(facefusion.globals.target_path)
+	update_status(f'# of processed frames{processed_frame_count}')
 	# Check if temp frames already exist
 	temp_frame_paths = get_temp_frame_paths(facefusion.globals.target_path, processed_frame_count)
+	update_status(f'# of unprocessed frames{len(temp_frame_paths)}')
 	if temp_frame_paths:
 		for frame_processor_module in get_frame_processors_modules(facefusion.globals.frame_processors):
 			update_status(wording.get('processing'), frame_processor_module.NAME)
