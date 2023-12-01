@@ -19,7 +19,7 @@ from facefusion.vision import detect_fps
 
 #TEMP_DIRECTORY_PATH = os.path.join(tempfile.gettempdir(), 'facefusion')
 #TEMP_DIRECTORY_PATH = '/content/drive/MyDrive/FSWAP'
-TEMP_DIRECTORY_PATH = facefusion.globals.temp_path
+#TEMP_DIRECTORY_PATH = facefusion.globals.temp_path
 TEMP_OUTPUT_VIDEO_NAME = 'temp.mp4'
 
 # monkey patch ssl
@@ -119,7 +119,7 @@ def get_temp_frames_pattern(target_path : str, temp_frame_prefix : str) -> str:
 
 def get_temp_directory_path(target_path : str) -> str:
 	target_name, _ = os.path.splitext(os.path.basename(target_path))
-	return os.path.join(TEMP_DIRECTORY_PATH, target_name)
+	return os.path.join(facefusion.globals.temp_path, target_name)
 
 
 def get_temp_output_video_path(target_path : str) -> str:
@@ -251,7 +251,7 @@ def get_device(execution_providers : List[str]) -> str:
 def get_processed_frame_count(target_path) -> int:
     # 实现获取已处理的帧数逻辑，可以根据实际需求进行修改
 	target_name, _ = os.path.splitext(os.path.basename(target_path))
-	fp_count = os.path.join(TEMP_DIRECTORY_PATH, f"{target_name}_count.txt")
+	fp_count = os.path.join(facefusion.globals.temp_path, f"{target_name}_count.txt")
 	if os.path.exists(fp_count):
 		with open(fp_count, "r") as f:
 			count = int(f.read())
