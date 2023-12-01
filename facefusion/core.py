@@ -30,6 +30,7 @@ def cli() -> None:
 	program.add_argument('-s', '--source', help = wording.get('source_help'), dest = 'source_path')
 	program.add_argument('-t', '--target', help = wording.get('target_help'), dest = 'target_path')
 	program.add_argument('-o', '--output', help = wording.get('output_help'), dest = 'output_path')
+	program.add_argument('-d', '--temp-dir', help = 'TEMP_DIRECTORY_PATH', dest = 'temp_path')
 	program.add_argument('-v', '--version', version = metadata.get('name') + ' ' + metadata.get('version'), action = 'version')
 	# misc
 	group_misc = program.add_argument_group('misc')
@@ -83,6 +84,7 @@ def apply_args(program : ArgumentParser) -> None:
 	# general
 	facefusion.globals.source_path = args.source_path
 	facefusion.globals.target_path = args.target_path
+	facefusion.globals.temp_path = args.temp_path
 	facefusion.globals.output_path = normalize_output_path(facefusion.globals.source_path, facefusion.globals.target_path, args.output_path)
 	# misc
 	facefusion.globals.skip_download = args.skip_download
